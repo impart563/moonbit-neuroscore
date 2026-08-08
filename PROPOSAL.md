@@ -1,5 +1,10 @@
 # moonbit-neuroscore：神经外科围手术期风险与量表工具包
 
+代码仓库：
+
+- GitHub：https://github.com/impart563/moonbit-neuroscore
+- GitLink：https://gitlink.org.cn/wjhppo/moonbit-neuroscore
+
 ## 目标与用户
 
 面向神经外科、神经重症和急诊软件开发者，提供可复用、可测试、可解释的 MoonBit 医学计算基础设施。项目不做诊断建议，只把公开量表的字段、范围、分数、缺失值和解释组织成稳定 API，便于教学、科研原型、数据清洗与临床软件集成。
