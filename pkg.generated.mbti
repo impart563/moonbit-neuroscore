@@ -1,0 +1,62 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "wjhp/moonbit-neuroscore"
+
+import {
+  "moonbitlang/core/debug",
+}
+
+// Values
+pub fn aspects(Int) -> ScoreResult
+
+pub fn band_name(RiskBand) -> String
+
+pub fn gcs(Int, Int, Int) -> ScoreResult
+
+pub fn hunt_hess(Int) -> ScoreResult
+
+pub fn ich_score(Int, Int, Int, Int, Int) -> ScoreResult
+
+pub fn modified_fisher(Int) -> ScoreResult
+
+pub fn mrs(Int) -> ScoreResult
+
+pub fn score_input(label~ : String, value~ : Int) -> ScoreInput
+
+pub fn score_result_json(ScoreResult) -> String
+
+pub fn wfns(Int) -> ScoreResult
+
+// Errors
+
+// Types and methods
+pub struct EvidenceNote {
+  source : String
+  note : String
+} derive(@debug.Debug)
+
+pub(all) enum RiskBand {
+  Low
+  Moderate
+  High
+  Severe
+  NotApplicable
+} derive(Eq, @debug.Debug)
+
+pub struct ScoreInput {
+  label : String
+  value : Int
+} derive(@debug.Debug)
+
+pub struct ScoreResult {
+  name : String
+  total : Int
+  band : RiskBand
+  missing : Array[String]
+  explanation : String
+  evidence : Array[EvidenceNote]
+} derive(@debug.Debug)
+
+// Type aliases
+
+// Traits
+
