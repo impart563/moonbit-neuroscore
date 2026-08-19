@@ -2,7 +2,7 @@
 
 面向神经外科、神经重症与急诊流程的 MoonBit 评分基础设施。它把公开临床量表表达为类型安全、可测试、可解释的纯函数；库只负责结构化计算与记录，不提供诊断或治疗建议。
 
-## 已实现
+## 核心能力
 
 - GCS、mRS、Hunt–Hess、WFNS、modified Fisher、ICH Score、ASPECTS 记录模型
 - 统一 `ScoreResult`：总分、风险带、缺失字段和解释文本
@@ -14,9 +14,9 @@ moon run cmd/main -- calc gcs 3 4 5
 # {"name":"GCS","total":12,"band":"high",...}
 ```
 
-## 开发与验证
+## 快速开始
 
-需要 MoonBit 0.10.3 或更新版本：
+需要当前 MoonBit stable：
 
 ```bash
 moon check --deny-warn
@@ -24,6 +24,21 @@ moon test
 moon fmt --check
 moon info
 ```
+
+## CLI
+
+```bash
+moon run cmd/main -- calc gcs 3 4 5
+moon run cmd/main -- explain ich-score 1 1 1 1 0
+```
+
+## 架构
+
+根包提供纯评分函数和统一结果模型，序列化独立于领域计算，`cmd/main` 仅负责参数解析和输出。
+
+## 基准
+
+使用 `pwsh ./scripts/benchmark.ps1` 运行本机可复现实验，记录与限制见 [`BENCHMARKS.md`](BENCHMARKS.md)。
 
 ## 设计边界
 

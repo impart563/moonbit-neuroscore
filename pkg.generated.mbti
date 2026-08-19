@@ -1,5 +1,5 @@
 // Generated using `moon info`, DON'T EDIT IT
-package "wjhp/moonbit-neuroscore"
+package "impart563/moonbit-neuroscore"
 
 import {
   "moonbitlang/core/debug",
@@ -19,6 +19,10 @@ pub fn ich_score(Int, Int, Int, Int, Int) -> ScoreResult
 pub fn modified_fisher(Int) -> ScoreResult
 
 pub fn mrs(Int) -> ScoreResult
+
+pub fn scale_catalog() -> Array[ScaleDescriptor]
+
+pub fn scale_descriptor(String) -> ScaleDescriptor?
 
 pub fn score_input(label~ : String, value~ : Int) -> ScoreInput
 
@@ -40,6 +44,14 @@ pub(all) enum RiskBand {
   High
   Severe
   NotApplicable
+} derive(Eq, @debug.Debug)
+
+pub struct ScaleDescriptor {
+  id : String
+  title : String
+  minimum : Int
+  maximum : Int
+  description : String
 } derive(Eq, @debug.Debug)
 
 pub struct ScoreInput {

@@ -6,21 +6,42 @@ on:
 
 jobs:
   check:
-    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    defaults:
+      run:
+        shell: bash
     steps:
       - uses: actions/checkout@v4
-      - name: Install MoonBit 0.10.3+
+      - name: Install MoonBit stable (Unix)
+        if: runner.os != 'Windows'
         run: |
           curl -fsSL https://cli.moonbitlang.com/install/unix.sh | bash
           echo "$HOME/.moon/bin" >> "$GITHUB_PATH"
+      - name: Install MoonBit stable (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          Set-ExecutionPolicy RemoteSigned -Scope CurrentUser
+          irm https://cli.moonbitlang.com/install/powershell.ps1 | iex
+          echo "$HOME/.moon/bin" | Out-File -FilePath $env:GITHUB_PATH -Append
       - name: Check, test, format and interface
         run: |
           moon version --all
           moon fmt --check
           moon check --deny-warn
-          moon test --deny-warn
           moon info
           git diff --exit-code
+      - name: MoonBit wasm-gc tests
+        run: |
+          moon test --deny-warn --enable-coverage
+          moon coverage report -f summary
+      - name: MoonBit native tests
+        run: |
+          moon test --target native --deny-warn
       - name: CLI smoke test
         run: |
           moon run cmd/main -- calc gcs 3 4 5

@@ -1,7 +1,7 @@
 import {
   "moonbitlang/core/env",
   "moonbitlang/core/string",
-  "wjhp/moonbit-neuroscore" @neuroscore,
+  "impart563/moonbit-neuroscore" @neuroscore,
 }
 
 pkgtype(kind: "executable")

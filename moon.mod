@@ -1,14 +1,14 @@
-name = "wjhp/moonbit-neuroscore"
+name = "impart563/moonbit-neuroscore"
 
-version = "0.1.0"
+version = "0.2.0"
 
 readme = "README.mbt.md"
 
-repository = "https://github.com/wjhp/moonbit-neuroscore"
+repository = "https://github.com/impart563/moonbit-neuroscore"
 
 license = "MIT"
 
-keywords = [ ]
+keywords = [ "clinical", "neurosurgery", "scoring", "healthcare", "cli" ]
 
 preferred_target = "wasm-gc"
 
