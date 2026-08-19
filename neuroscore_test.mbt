@@ -111,3 +111,24 @@ test "registry reports missing fields without coercion" {
   assert_true(record.result is None)
   assert_true(record.error is Some(MissingField(label="age_points")))
 }
+
+///|
+test "csv parser preserves quoted commas and rejects broken quotes" {
+  let row = parse_csv_row("alpha,\"beta,gamma\",\"say \"\"hi\"\"\"")
+  assert_eq(row, ["alpha", "beta,gamma", "say hi"])
+  let broken = try {
+    ignore(parse_csv_row("alpha,\"broken"))
+    false
+  } catch {
+    _ => true
+  }
+  assert_true(broken)
+}
+
+///|
+test "FHIR observation output carries typed score semantics" {
+  let json = score_result_fhir_observation(gcs(4, 5, 6), "case-15")
+  assert_true(json.contains("\"resourceType\":\"Observation\""))
+  assert_true(json.contains("\"valueInteger\":15"))
+  assert_true(json.contains("\"id\":\"case-15\""))
+}
