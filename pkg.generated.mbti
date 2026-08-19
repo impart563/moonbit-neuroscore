@@ -8,7 +8,21 @@ import {
 // Values
 pub fn aspects(Int) -> ScoreResult
 
+pub fn audit_event(sequence~ : Int, kind~ : AuditKind, scale~ : String, case_id~ : String, detail~ : String) -> AuditEvent
+
 pub fn band_name(RiskBand) -> String
+
+pub fn case_id(suite~ : String, number~ : Int) -> CaseId
+
+pub fn evaluate_csv_rows(scale~ : String, rows~ : Array[String]) -> BatchSummary
+
+pub fn evaluate_scale(case_id~ : String, scale~ : String, fields~ : Array[ScoreInput]) -> EvaluationRecord
+
+pub fn evaluation_failure(case_id~ : String, scale~ : String, error~ : ScoreError) -> EvaluationRecord
+
+pub fn evaluation_success(case_id~ : String, scale~ : String, result~ : ScoreResult) -> EvaluationRecord
+
+pub fn field_diagnostic(field~ : String, value~ : String, message~ : String) -> FieldDiagnostic
 
 pub fn gcs(Int, Int, Int) -> ScoreResult
 
@@ -20,23 +34,89 @@ pub fn modified_fisher(Int) -> ScoreResult
 
 pub fn mrs(Int) -> ScoreResult
 
+pub fn parse_csv_row(String) -> Array[String] raise ScoreError
+
 pub fn scale_catalog() -> Array[ScaleDescriptor]
 
 pub fn scale_descriptor(String) -> ScaleDescriptor?
 
+pub fn score_case(id~ : CaseId, scale~ : String, fields~ : Array[ScoreInput], expected_total? : Int, expected_band? : RiskBand, note~ : String) -> ScoreCase
+
+pub fn score_error_code(ScoreError) -> String
+
+pub fn score_error_message(ScoreError) -> String
+
 pub fn score_input(label~ : String, value~ : Int) -> ScoreInput
+
+pub fn score_result_fhir_observation(ScoreResult, String) -> String
 
 pub fn score_result_json(ScoreResult) -> String
 
 pub fn wfns(Int) -> ScoreResult
 
 // Errors
+pub(all) suberror ScoreError {
+  UnknownScale(String)
+  InvalidField(label~ : String, value~ : String, reason~ : String)
+  MissingField(label~ : String)
+  InvalidRow(row~ : Int, reason~ : String)
+  InvalidColumn(row~ : Int, column~ : String, reason~ : String)
+  DuplicateField(label~ : String)
+  EmptyInput
+  UnsupportedVersion(scale~ : String, version~ : String)
+} derive(Eq, @debug.Debug)
 
 // Types and methods
+pub struct AuditEvent {
+  sequence : Int
+  kind : AuditKind
+  scale : String
+  case_id : String
+  detail : String
+} derive(Eq, @debug.Debug)
+pub fn AuditEvent::kind_name(Self) -> String
+pub fn AuditEvent::to_json(Self) -> String
+
+pub(all) enum AuditKind {
+  EvaluationStarted
+  EvaluationCompleted
+  EvaluationRejected
+  BatchStarted
+  BatchCompleted
+} derive(Eq, @debug.Debug)
+
+pub struct BatchSummary {
+  total : Int
+  successes : Int
+  failures : Int
+  records : Array[EvaluationRecord]
+} derive(@debug.Debug)
+
+pub struct CaseId {
+  suite : String
+  number : Int
+} derive(Eq, @debug.Debug)
+pub fn CaseId::to_string(Self) -> String
+
+pub struct EvaluationRecord {
+  case_id : String
+  scale : String
+  result : ScoreResult?
+  error : ScoreError?
+} derive(@debug.Debug)
+pub fn EvaluationRecord::is_success(Self) -> Bool
+pub fn EvaluationRecord::summary(Self) -> String
+
 pub struct EvidenceNote {
   source : String
   note : String
 } derive(@debug.Debug)
+
+pub struct FieldDiagnostic {
+  field : String
+  value : String
+  message : String
+} derive(Eq, @debug.Debug)
 
 pub(all) enum RiskBand {
   Low
@@ -54,10 +134,20 @@ pub struct ScaleDescriptor {
   description : String
 } derive(Eq, @debug.Debug)
 
+pub struct ScoreCase {
+  id : CaseId
+  scale : String
+  fields : Array[ScoreInput]
+  expected_total : Int?
+  expected_band : RiskBand?
+  note : String
+} derive(Eq, @debug.Debug)
+pub fn ScoreCase::is_expected(Self, ScoreResult) -> Bool
+
 pub struct ScoreInput {
   label : String
   value : Int
-} derive(@debug.Debug)
+} derive(Eq, @debug.Debug)
 
 pub struct ScoreResult {
   name : String
