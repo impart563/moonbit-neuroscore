@@ -88,3 +88,26 @@ test "case identifiers and audit events are deterministic" {
   assert_eq(event.kind_name(), "evaluation_completed")
   assert_true(event.to_json().contains("gcs-boundary-7"))
 }
+
+///|
+test "registry dispatch preserves direct calculator semantics" {
+  let fields = [
+    score_input(label="eye", value=4),
+    score_input(label="verbal", value=5),
+    score_input(label="motor", value=6),
+  ]
+  let record = evaluate_scale(case_id="case-1", scale="gcs", fields~)
+  assert_true(record.is_success())
+  assert_eq(record.summary(), "gcs:15:moderate")
+  let unknown = evaluate_scale(case_id="case-2", scale="new", fields=[])
+  assert_true(unknown.error is Some(UnknownScale("new")))
+}
+
+///|
+test "registry reports missing fields without coercion" {
+  let record = evaluate_scale(case_id="case-3", scale="ich-score", fields=[
+    score_input(label="gcs_points", value=1),
+  ])
+  assert_true(record.result is None)
+  assert_true(record.error is Some(MissingField(label="age_points")))
+}

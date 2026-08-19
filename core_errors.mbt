@@ -1,6 +1,6 @@
 ///|
 /// Structured failures shared by parsers, registries, and batch evaluators.
-pub(all) enum ScoreError {
+pub(all) suberror ScoreError {
   UnknownScale(String)
   InvalidField(label~ : String, value~ : String, reason~ : String)
   MissingField(label~ : String)
