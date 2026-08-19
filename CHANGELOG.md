@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.3.0
+
+- Added structured score errors, case identifiers, audit events, and registry dispatch.
+- Added CSV batch evaluation and FHIR-shaped Observation output.
+- Added CLI catalog discovery and an auditable 16,807-case ICH boundary corpus.
+- Added source-size guard and expanded benchmark reporting.
+
 ## 0.2.0
 
 - Reworked public project documentation and package metadata.
