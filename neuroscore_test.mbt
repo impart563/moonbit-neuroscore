@@ -60,3 +60,31 @@ test "catalog is stable and supports safe lookup" {
   assert_eq(scale_descriptor("gcs").unwrap().maximum, 15)
   assert_true(scale_descriptor("unknown") is None)
 }
+
+///|
+test "structured errors retain transport context" {
+  let error : ScoreError = InvalidColumn(
+    row=4,
+    column="motor",
+    reason="not an integer",
+  )
+  assert_eq(score_error_code(error), "invalid_column")
+  assert_true(score_error_message(error).contains("motor"))
+  assert_eq(score_error_code(ScoreError::UnknownScale("new")), "unknown_scale")
+  assert_eq(score_error_code(ScoreError::EmptyInput), "empty_input")
+}
+
+///|
+test "case identifiers and audit events are deterministic" {
+  let id = case_id(suite="gcs-boundary", number=7)
+  assert_eq(id.to_string(), "gcs-boundary-7")
+  let event = audit_event(
+    sequence=2,
+    kind=EvaluationCompleted,
+    scale="gcs",
+    case_id=id.to_string(),
+    detail="total=15",
+  )
+  assert_eq(event.kind_name(), "evaluation_completed")
+  assert_true(event.to_json().contains("gcs-boundary-7"))
+}

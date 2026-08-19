@@ -11,7 +11,7 @@ pub(all) enum RiskBand {
 pub struct ScoreInput {
   label : String
   value : Int
-} derive(Debug)
+} derive(Debug, Eq)
 
 ///|
 pub fn score_input(label~ : String, value~ : Int) -> ScoreInput {
