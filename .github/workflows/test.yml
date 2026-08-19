@@ -42,6 +42,9 @@ jobs:
       - name: MoonBit native tests
         run: |
           moon test --target native --deny-warn
+      - name: In-scope source size audit
+        shell: pwsh
+        run: ./scripts/count-lines.ps1
       - name: CLI smoke test
         run: |
           moon run cmd/main -- calc gcs 3 4 5

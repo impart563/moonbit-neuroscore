@@ -40,6 +40,8 @@ Run `pwsh ./scripts/benchmark.ps1` for a local, reproducible throughput measurem
 
 `moon test --deny-warn` covers normal cases and invalid/range boundaries. CI runs formatting, warning-free checks, interface generation, wasm-gc tests, native tests, coverage summary, and CLI smoke tests on every push and pull request.
 
+The auditable source-size guard is `pwsh ./scripts/count-lines.ps1`. It reports production, test, fixture, and combined MoonBit lines while excluding `_build`; generated artifacts are never counted.
+
 ## License
 
 MIT; see [LICENSE](LICENSE).
