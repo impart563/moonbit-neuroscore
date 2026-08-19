@@ -1,5 +1,6 @@
 ///|
 fn usage() -> Unit {
+  println("neuroscore catalog")
   println("neuroscore calc gcs EYE VERBAL MOTOR")
   println("neuroscore explain ich-score GCS AGE VOLUME IVH INFRATENTORIAL")
 }
@@ -19,6 +20,12 @@ fn main {
     return
   }
   match args[1:] {
+    ["catalog"] =>
+      for descriptor in @neuroscore.scale_catalog() {
+        println(
+          "\{descriptor.id}\t\{descriptor.title}\t\{descriptor.minimum}..\{descriptor.maximum}",
+        )
+      }
     ["calc", "gcs", eye, verbal, motor] =>
       match parse_int(eye) {
         Some(e) =>

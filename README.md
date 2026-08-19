@@ -22,6 +22,7 @@ moon run cmd/main -- calc gcs 3 4 5
 ## CLI
 
 ```text
+neuroscore catalog
 neuroscore calc gcs EYE VERBAL MOTOR
 neuroscore explain ich-score GCS AGE VOLUME IVH INFRATENTORIAL
 ```
